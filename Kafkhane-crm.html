@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدیریت تیم فروش | کافخانه کسب و کار</title>
+<style>
+  :root{
+    --navy-deep:#081128;
+    --navy-mid:#0f1f45;
+    --navy-soft:#16295c;
+    --gold:#d4af37;
+    --gold-light:#f0d688;
+    --gold-dim:#8a742a;
+    --ink:#eef1fb;
+    --ink-dim:rgba(238,241,251,0.62);
+    --glass-bg:rgba(255,255,255,0.055);
+    --glass-border:rgba(212,175,55,0.28);
+    --danger:#e06a6a;
+    --success:#6ecf9a;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:'Vazirmatn','IRANSans',Tahoma,Arial,sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    background:
+      radial-gradient(1100px 600px at 15% -5%, rgba(212,175,55,0.14), transparent 60%),
+      radial-gradient(900px 700px at 110% 10%, rgba(212,175,55,0.10), transparent 55%),
+      linear-gradient(160deg, var(--navy-deep) 0%, var(--navy-mid) 55%, var(--navy-soft) 100%);
+    background-attachment:fixed;
+    padding:24px 16px 60px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;}
+
+  /* header */
+  .brand{
+    display:flex;align-items:center;gap:14px;
+    margin-bottom:28px;
+  }
+  .brand-icon{
+    width:52px;height:52px;flex:none;
+    filter:drop-shadow(0 0 8px rgba(212,175,55,0.35));
+  }
+  .brand-text h1{
+    margin:0;font-size:20px;font-weight:700;
+    background:linear-gradient(90deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    letter-spacing:.2px;
+  }
+  .brand-text p{margin:2px 0 0;font-size:12.5px;color:var(--ink-dim);}
+
+  .topbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+  .who{font-size:13px;color:var(--ink-dim);}
+  .who b{color:var(--gold-light);font-weight:600;}
+
+  /* glass card */
+  .glass{
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
+    border-radius:20px;
+    backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    box-shadow:0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+    padding:22px;
+  }
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media (max-width:720px){.grid2{grid-template-columns:1fr;}}
+
+  /* role select */
+  .role-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:26px;}
+  .role-title{text-align:center;}
+  .role-title h2{font-size:26px;margin:0 0 8px;color:var(--gold-light);}
+  .role-title p{color:var(--ink-dim);margin:0;font-size:14px;}
+  .role-cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;}
+  .role-card{
+    width:230px;padding:28px 20px;text-align:center;cursor:pointer;
+    transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .role-card:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 12px 40px rgba(212,175,55,0.18);}
+  .role-card .ic{font-size:34px;margin-bottom:10px;}
+  .role-card h3{margin:0 0 6px;font-size:16px;color:var(--ink);}
+  .role-card p{margin:0;font-size:12.5px;color:var(--ink-dim);}
+
+  .visitor-pick{display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;}
+  .visitor-pick .glass{padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:.15s;}
+  .visitor-pick .glass:hover{border-color:var(--gold);}
+  .empty-note{color:var(--ink-dim);font-size:13.5px;text-align:center;max-width:340px;line-height:2;}
+
+  /* buttons */
+  .btn{
+    border:1px solid var(--glass-border);
+    background:rgba(255,255,255,0.05);
+    color:var(--ink);
+    padding:9px 16px;border-radius:12px;cursor:pointer;
+    font-family:inherit;font-size:13.5px;font-weight:600;
+    transition:.15s;
+  }
+  .btn:hover{border-color:var(--gold);background:rgba(212,175,55,0.08);}
+  .btn-gold{background:linear-gradient(90deg,var(--gold-dim),var(--gold));border:none;color:#1a1406;}
+  .btn-gold:hover{filter:brightness(1.08);}
+  .btn-danger{border-color:rgba(224,106,106,0.4);color:var(--danger);}
+  .btn-danger:hover{background:rgba(224,106,106,0.12);border-color:var(--danger);}
+  .btn-ghost{background:transparent;border-color:transparent;color:var(--ink-dim);}
+  .btn-ghost:hover{color:var(--gold-light);}
+  .btn-sm{padding:6px 11px;font-size:12px;border-radius:9px;}
+
+  /* tabs */
+  .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+  .tab{
+    padding:8px 18px;border-radius:12px;cursor:pointer;font-size:13.5px;font-weight:600;
+    border:1px solid transparent;color:var(--ink-dim);
+  }
+  .tab.active{background:rgba(212,175,55,0.12);border-color:var(--glass-border);color:var(--gold-light);}
+  .tab:hover:not(.active){color:var(--ink);}
+
+  /* forms */
+  label{display:block;font-size:12.5px;color:var(--ink-dim);margin-bottom:5px;}
+  input,select{
+    width:100%;padding:10px 12px;border-radius:10px;
+    border:1px solid rgba(255,255,255,0.14);
+    background:rgba(255,255,255,0.04);
+    color:var(--ink);font-family:inherit;font-size:13.5px;
+    margin-bottom:14px;outline:none;
+  }
+  input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,0.12);}
+  input::placeholder{color:rgba(238,241,251,0.35);}
+  form h4{margin:0 0 14px;font-size:14.5px;color:var(--gold-light);font-weight:700;}
+
+  /* tables / lists */
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{
+    text-align:right;font-size:11.5px;color:var(--gold-dim);
+    text-transform:none;font-weight:700;padding:8px 10px;
+    border-bottom:1px solid rgba(212,175,55,0.2);letter-spacing:.3px;
+  }
+  td{padding:11px 10px;border-bottom:1px solid rgba(255,255,255,0.06);color:var(--ink);vertical-align:middle;}
+  tr:last-child td{border-bottom:none;}
+  .muted{color:var(--ink-dim);font-size:12px;}
+  .row-actions{display:flex;gap:6px;justify-content:flex-start;}
+  .empty-row td{text-align:center;color:var(--ink-dim);padding:30px 10px;font-size:13px;}
+
+  .filters{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+  .filters select,.filters input{margin-bottom:0;min-width:160px;flex:1;}
+
+  .item-add-row{display:flex;gap:8px;align-items:flex-end;}
+  .item-add-row input{margin-bottom:0;}
+  .item-add-row input[name="pname"]{flex:2;}
+  .item-add-row input[name="pqty"]{flex:1;}
+  .draft-list{display:flex;flex-direction:column;gap:6px;margin:12px 0;}
+  .draft-chip{
+    display:flex;justify-content:space-between;align-items:center;
+    background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.18);
+    border-radius:10px;padding:7px 12px;font-size:12.5px;
+  }
+  .draft-chip .qty{color:var(--gold-light);font-weight:700;margin-inline-end:8px;}
+  .items-pill-list{display:flex;flex-wrap:wrap;gap:5px;}
+  .items-pill{font-size:11px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:2px 9px;color:var(--ink-dim);}
+  .status-pending{color:var(--gold-light);}
+  .status-confirmed{color:var(--success);}
+  .vtabs{display:flex;gap:8px;margin-bottom:16px;}
+  .vtab{padding:7px 16px;border-radius:12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink-dim);border:1px solid transparent;}
+  .vtab.active{background:rgba(212,175,55,0.12);border-color:var(--glass-border);color:var(--gold-light);}
+
+  /* stat cards */
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px;}
+  .stat-card{padding:18px;text-align:center;}
+  .stat-card .num{font-size:28px;font-weight:800;color:var(--gold-light);}
+  .stat-card .lbl{font-size:12px;color:var(--ink-dim);margin-top:4px;}
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px;}
+  .bar-row .name{width:130px;flex:none;color:var(--ink-dim);text-align:left;direction:ltr;}
+  .bar-track{flex:1;height:9px;background:rgba(255,255,255,0.07);border-radius:6px;overflow:hidden;}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:6px;}
+  .bar-count{width:34px;text-align:left;color:var(--gold-light);font-weight:700;font-size:12.5px;}
+
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(4,8,20,0.6);backdrop-filter:blur(4px);
+    display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;
+  }
+  .modal{width:100%;max-width:420px;}
+
+  .badge{
+    display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;
+    background:rgba(212,175,55,0.12);color:var(--gold-light);border:1px solid var(--glass-border);
+  }
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    background:rgba(15,31,69,0.95);border:1px solid var(--glass-border);
+    padding:10px 20px;border-radius:12px;font-size:13px;color:var(--ink);
+    box-shadow:0 8px 30px rgba(0,0,0,0.4);z-index:100;
+  }
+  .selfie-wrap{width:100%;max-width:360px;text-align:center;}
+  .selfie-frame{
+    width:100%;aspect-ratio:4/3;border-radius:16px;overflow:hidden;
+    background:#000;border:1px solid var(--glass-border);margin-bottom:14px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .selfie-frame video, .selfie-frame img{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
+  .log-thumb{width:34px;height:34px;border-radius:8px;object-fit:cover;border:1px solid var(--glass-border);}
+  .log-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:12.5px;}
+  .log-row:last-child{border-bottom:none;}
+  .log-row .meta{flex:1;}
+  .log-row .meta b{color:var(--ink);}
+  .log-row .meta span{display:block;color:var(--ink-dim);font-size:11.5px;}
+  .loading{display:flex;align-items:center;justify-content:center;min-height:50vh;color:var(--ink-dim);font-size:14px;gap:10px;}
+  .spin{width:18px;height:18px;border-radius:50%;border:2px solid rgba(212,175,55,0.25);border-top-color:var(--gold);animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .section-title{font-size:15px;font-weight:700;color:var(--gold-light);margin:0 0 16px;}
+  .hint{font-size:12px;color:var(--ink-dim);margin-top:-4px;margin-bottom:16px;line-height:1.8;}
+</style>
+</head>
+<body>
+<div id="app" class="wrap"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+const STORAGE_TEAM = 'team-members';
+const STORAGE_CUSTOMERS = 'customers';
+const STORAGE_SECURITY = 'security-config';
+const STORAGE_LOGIN_LOG = 'login-log';
+const STORAGE_DELIVERIES = 'product-deliveries';
+
+let mediaStream = null;
+
+let state = {
+  loading: true,
+  role: null,             // 'admin' | 'manager' | 'visitor'
+  currentVisitorId: null,
+  team: [],
+  customers: [],
+  deliveries: [],
+  security: { adminHash: null, salesHash: null },
+  loginLog: [],
+  managerTab: 'team',      // team | customers | products | stats | security(admin only)
+  visitorTab: 'customers', // customers | products (inside visitor panel)
+  filterVisitor: '',
+  filterField: '',
+  editingCustomer: null,   // id being edited
+  editingMember: null,
+  editingDelivery: null,   // id of a delivery record being edited (visitor only, not yet confirmed)
+  draftItems: [],          // temp product rows while building/editing a delivery record
+  toast: null,
+  authScreen: null,        // null | 'admin-login' | 'admin-setup' | 'sales-login' | 'visitor-pin' | 'face-capture'
+  authError: '',
+  cameraError: '',
+  pendingVisitorId: null,
+  pendingRole: null,       // role awaiting face capture: 'manager' | 'visitor'
+  pendingName: null,
+  modal: null              // {type:'change-admin-pw'|'set-sales-pw'|'change-sales-pw'|'reset-pin'|'view-login-photo', ...}
+};
+
+async function hashText(text){
+  const enc = new TextEncoder().encode(String(text));
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+
+function showToast(msg){
+  state.toast = msg;
+  render();
+  setTimeout(()=>{ state.toast = null; render(); }, 2200);
+}
+
+async function loadAll(){
+  try{
+    const teamRes = await window.storage.get(STORAGE_TEAM, true);
+    state.team = teamRes ? JSON.parse(teamRes.value) : [];
+  }catch(e){ state.team = []; }
+  try{
+    const custRes = await window.storage.get(STORAGE_CUSTOMERS, true);
+    state.customers = custRes ? JSON.parse(custRes.value) : [];
+  }catch(e){ state.customers = []; }
+  try{
+    const secRes = await window.storage.get(STORAGE_SECURITY, true);
+    state.security = secRes ? JSON.parse(secRes.value) : { adminHash: null, salesHash: null };
+  }catch(e){ state.security = { adminHash: null, salesHash: null }; }
+  try{
+    const logRes = await window.storage.get(STORAGE_LOGIN_LOG, true);
+    state.loginLog = logRes ? JSON.parse(logRes.value) : [];
+  }catch(e){ state.loginLog = []; }
+  try{
+    const delRes = await window.storage.get(STORAGE_DELIVERIES, true);
+    state.deliveries = delRes ? JSON.parse(delRes.value) : [];
+  }catch(e){ state.deliveries = []; }
+  state.loading = false;
+  render();
+}
+
+async function saveTeam(){
+  try{ await window.storage.set(STORAGE_TEAM, JSON.stringify(state.team), true); }
+  catch(e){ showToast('خطا در ذخیره‌سازی اطلاعات تیم'); }
+}
+async function saveCustomers(){
+  try{ await window.storage.set(STORAGE_CUSTOMERS, JSON.stringify(state.customers), true); }
+  catch(e){ showToast('خطا در ذخیره‌سازی اطلاعات مشتریان'); }
+}
+async function saveSecurity(){
+  try{ await window.storage.set(STORAGE_SECURITY, JSON.stringify(state.security), true); }
+  catch(e){ showToast('خطا در ذخیره‌سازی تنظیمات امنیتی'); }
+}
+async function saveLoginLog(){
+  try{ await window.storage.set(STORAGE_LOGIN_LOG, JSON.stringify(state.loginLog), true); }
+  catch(e){ /* non-blocking */ }
+}
+async function saveDeliveries(){
+  try{ await window.storage.set(STORAGE_DELIVERIES, JSON.stringify(state.deliveries), true); }
+  catch(e){ showToast('خطا در ذخیره‌سازی اطلاعات محصولات'); }
+}
+
+// ---------- auth flow ----------
+function chooseRole(role){
+  state.authError = '';
+  if(role === 'admin'){
+    state.authScreen = state.security.adminHash ? 'admin-login' : 'admin-setup';
+  } else if(role === 'manager'){
+    state.authScreen = 'sales-login';
+  } else if(role === 'visitor'){
+    state.authScreen = null;
+    state.role = 'visitor';
+  }
+  render();
+}
+
+async function submitAdminSetup(e){
+  e.preventDefault();
+  const f = e.target;
+  const p1 = f.pw1.value, p2 = f.pw2.value;
+  if(p1.length < 4){ state.authError = 'رمز باید حداقل ۴ کاراکتر باشد'; render(); return; }
+  if(p1 !== p2){ state.authError = 'تکرار رمز مطابقت ندارد'; render(); return; }
+  state.security.adminHash = await hashText(p1);
+  await saveSecurity();
+  state.authScreen = null;
+  state.role = 'admin';
+  state.managerTab = 'team';
+  showToast('رمز مدیر کافخانه تنظیم شد');
+}
+
+async function submitAdminLogin(e){
+  e.preventDefault();
+  const f = e.target;
+  const h = await hashText(f.pw.value);
+  if(h === state.security.adminHash){
+    state.authScreen = null;
+    state.role = 'admin';
+    state.managerTab = 'team';
+    state.authError = '';
+    render();
+  } else {
+    state.authError = 'رمز عبور اشتباه است';
+    render();
+  }
+}
+
+async function submitSalesLogin(e){
+  e.preventDefault();
+  const f = e.target;
+  const h = await hashText(f.pw.value);
+  if(h === state.security.salesHash){
+    state.authError = '';
+    await enterFaceCapture('manager', 'مدیر فروش');
+  } else {
+    state.authError = 'رمز عبور اشتباه است';
+    render();
+  }
+}
+
+function pickVisitorForPin(id){
+  state.pendingVisitorId = id;
+  state.authScreen = 'visitor-pin';
+  state.authError = '';
+  render();
+}
+
+async function submitVisitorPin(e){
+  e.preventDefault();
+  const f = e.target;
+  const m = state.team.find(x=>x.id===state.pendingVisitorId);
+  if(!m){ state.authError = 'خطا در یافتن عضو'; render(); return; }
+  const h = await hashText(f.pin.value);
+  if(h === m.pinHash){
+    state.authError = '';
+    await enterFaceCapture('visitor', m.name);
+  } else {
+    state.authError = 'کد پین اشتباه است';
+    render();
+  }
+}
+
+// ---------- face capture (identity photo) ----------
+async function enterFaceCapture(role, name){
+  state.pendingRole = role;
+  state.pendingName = name;
+  state.authScreen = 'face-capture';
+  state.cameraError = '';
+  render();
+  await startCamera();
+}
+
+async function startCamera(){
+  try{
+    mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 320, height: 240 }, audio: false });
+    const video = document.getElementById('camPreview');
+    if(video){
+      video.srcObject = mediaStream;
+      await video.play().catch(()=>{});
+    }
+  }catch(e){
+    state.cameraError = 'دسترسی به دوربین امکان‌پذیر نشد. لطفاً اجازه دسترسی به دوربین را در تنظیمات مرورگر بدهید و دوباره تلاش کنید.';
+    render();
+  }
+}
+
+function stopCamera(){
+  if(mediaStream){
+    mediaStream.getTracks().forEach(t=>t.stop());
+    mediaStream = null;
+  }
+}
+
+function retryCamera(){
+  state.cameraError = '';
+  render();
+  startCamera();
+}
+
+async function captureAndFinish(){
+  const video = document.getElementById('camPreview');
+  if(!video || !video.videoWidth){ showToast('دوربین هنوز آماده نیست، چند لحظه صبر کنید'); return; }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 320; canvas.height = 240;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, 320, 240);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+
+  stopCamera();
+
+  const id = uid();
+  try{ await window.storage.set('login-photo:'+id, dataUrl, true); }
+  catch(e){ /* continue even if photo storage fails, do not block login */ }
+
+  state.loginLog.unshift({ id, role: state.pendingRole, name: state.pendingName, timestamp: new Date().toISOString() });
+  await saveLoginLog();
+
+  finalizeLogin();
+}
+
+function finalizeLogin(){
+  if(state.pendingRole === 'manager'){
+    state.role = 'manager';
+    state.managerTab = 'team';
+  } else if(state.pendingRole === 'visitor'){
+    state.role = 'visitor';
+    state.currentVisitorId = state.pendingVisitorId;
+  }
+  state.authScreen = null;
+  state.pendingRole = null;
+  state.pendingName = null;
+  state.pendingVisitorId = null;
+  render();
+}
+
+function cancelFaceCapture(){
+  stopCamera();
+  state.authScreen = null;
+  state.pendingRole = null;
+  state.pendingName = null;
+  state.pendingVisitorId = null;
+  state.cameraError = '';
+  render();
+}
+
+function chooseVisitor(id){
+  pickVisitorForPin(id);
+}
+function backToRoleSelect(){
+  stopCamera();
+  state.authScreen = null;
+  state.pendingVisitorId = null;
+  state.authError = '';
+  state.role = null;
+  render();
+}
+function logout(){
+  stopCamera();
+  state.role = null;
+  state.currentVisitorId = null;
+  state.pendingVisitorId = null;
+  state.authScreen = null;
+  state.authError = '';
+  state.managerTab = 'team';
+  state.visitorTab = 'customers';
+  state.editingDelivery = null;
+  state.draftItems = [];
+  state.modal = null;
+  render();
+}
+
+async function addMember(e){
+  e.preventDefault();
+  const f = e.target;
+  const name = f.name.value.trim();
+  const phone = f.phone.value.trim();
+  const pin = f.pin.value.trim();
+  if(!name || !phone) return;
+  if(!/^\d{4,6}$/.test(pin)){ showToast('پین باید ۴ تا ۶ رقم عددی باشد'); return; }
+  const pinHash = await hashText(pin);
+  state.team.push({ id: uid(), name, phone, startDate: new Date().toISOString().slice(0,10), pinHash });
+  f.reset();
+  await saveTeam();
+  showToast('عضو جدید اضافه شد');
+  render();
+}
+function startEditMember(id){ state.editingMember = id; render(); }
+async function saveEditMember(e, id){
+  e.preventDefault();
+  const f = e.target;
+  const m = state.team.find(x=>x.id===id);
+  if(!m) return;
+  m.name = f.name.value.trim();
+  m.phone = f.phone.value.trim();
+  state.editingMember = null;
+  await saveTeam();
+  showToast('اطلاعات عضو بروزرسانی شد');
+  render();
+}
+async function deleteMember(id){
+  if(!confirm('این ویزیتور حذف شود؟ (مشتریان ثبت‌شده توسط او در سیستم باقی می‌مانند)')) return;
+  state.team = state.team.filter(x=>x.id!==id);
+  await saveTeam();
+  showToast('عضو حذف شد');
+  render();
+}
+
+// ---------- security modals ----------
+function openModal(modal){ state.modal = modal; state.authError=''; render(); }
+function closeModal(){ state.modal = null; state.authError=''; render(); }
+
+async function viewLoginPhoto(id, name){
+  state.modal = { type: 'view-login-photo', id, name, photo: null, loading: true };
+  render();
+  try{
+    const res = await window.storage.get('login-photo:'+id, true);
+    state.modal.photo = res ? res.value : null;
+  }catch(e){ state.modal.photo = null; }
+  state.modal.loading = false;
+  render();
+}
+
+async function submitChangeAdminPw(e){
+  e.preventDefault();
+  const f = e.target;
+  const cur = await hashText(f.current.value);
+  if(cur !== state.security.adminHash){ state.authError = 'رمز فعلی اشتباه است'; render(); return; }
+  if(f.next.value.length < 4){ state.authError = 'رمز جدید باید حداقل ۴ کاراکتر باشد'; render(); return; }
+  if(f.next.value !== f.confirm.value){ state.authError = 'تکرار رمز جدید مطابقت ندارد'; render(); return; }
+  state.security.adminHash = await hashText(f.next.value);
+  await saveSecurity();
+  state.modal = null;
+  showToast('رمز مدیر کافخانه تغییر کرد');
+}
+
+async function submitSetSalesPw(e){
+  e.preventDefault();
+  const f = e.target;
+  if(f.next.value.length < 4){ state.authError = 'رمز باید حداقل ۴ کاراکتر باشد'; render(); return; }
+  if(f.next.value !== f.confirm.value){ state.authError = 'تکرار رمز مطابقت ندارد'; render(); return; }
+  state.security.salesHash = await hashText(f.next.value);
+  await saveSecurity();
+  state.modal = null;
+  showToast('رمز مدیر فروش تنظیم شد');
+}
+
+async function submitChangeSalesPw(e){
+  e.preventDefault();
+  const f = e.target;
+  const cur = await hashText(f.current.value);
+  if(cur !== state.security.salesHash){ state.authError = 'رمز فعلی اشتباه است'; render(); return; }
+  if(f.next.value.length < 4){ state.authError = 'رمز جدید باید حداقل ۴ کاراکتر باشد'; render(); return; }
+  if(f.next.value !== f.confirm.value){ state.authError = 'تکرار رمز جدید مطابقت ندارد'; render(); return; }
+  state.security.salesHash = await hashText(f.next.value);
+  await saveSecurity();
+  state.modal = null;
+  showToast('رمز عبور شما تغییر کرد');
+}
+
+async function submitResetPin(e, id){
+  e.preventDefault();
+  const f = e.target;
+  const pin = f.pin.value.trim();
+  if(!/^\d{4,6}$/.test(pin)){ state.authError = 'پین باید ۴ تا ۶ رقم عددی باشد'; render(); return; }
+  const m = state.team.find(x=>x.id===id);
+  if(!m) return;
+  m.pinHash = await hashText(pin);
+  await saveTeam();
+  state.modal = null;
+  showToast('پین ویزیتور بازنشانی شد');
+}
+
+async function addCustomer(e, visitorId, visitorName){
+  e.preventDefault();
+  const f = e.target;
+  const name = f.name.value.trim();
+  const phone = f.phone.value.trim();
+  const field = f.field.value.trim();
+  if(!name || !phone) return;
+  state.customers.push({
+    id: uid(), name, phone, field,
+    visitorId, visitorName,
+    createdAt: new Date().toISOString()
+  });
+  f.reset();
+  await saveCustomers();
+  showToast('مشتری با موفقیت ثبت شد');
+  render();
+}
+function startEditCustomer(id){ state.editingCustomer = id; render(); }
+async function saveEditCustomer(e, id){
+  e.preventDefault();
+  const f = e.target;
+  const c = state.customers.find(x=>x.id===id);
+  if(!c) return;
+  c.name = f.name.value.trim();
+  c.phone = f.phone.value.trim();
+  c.field = f.field.value.trim();
+  c.updatedAt = new Date().toISOString();
+  state.editingCustomer = null;
+  await saveCustomers();
+  showToast('اطلاعات مشتری بروزرسانی شد');
+  render();
+}
+async function deleteCustomer(id){
+  if(!confirm('این مشتری حذف شود؟')) return;
+  state.customers = state.customers.filter(x=>x.id!==id);
+  await saveCustomers();
+  showToast('مشتری حذف شد');
+  render();
+}
+function cancelEdit(){ state.editingCustomer = null; state.editingMember = null; render(); }
+function setManagerTab(tab){ state.managerTab = tab; render(); }
+function setFilterVisitor(v){ state.filterVisitor = v; render(); }
+function setFilterField(v){ state.filterField = v; render(); }
+function setVisitorTab(tab){ state.visitorTab = tab; render(); }
+
+// ---------- product deliveries (received by visitors) ----------
+function addDraftItem(e){
+  e.preventDefault();
+  const f = e.target;
+  const name = f.pname.value.trim();
+  const qty = parseInt(f.pqty.value, 10);
+  if(!name || !qty || qty <= 0){ showToast('نام محصول و تعداد معتبر وارد کنید'); return; }
+  state.draftItems.push({ name, qty });
+  f.reset();
+  render();
+  const nameInput = document.querySelector('[data-draft-name]');
+  if(nameInput) nameInput.focus();
+}
+function removeDraftItem(idx){
+  state.draftItems.splice(idx, 1);
+  render();
+}
+async function submitDelivery(e, visitorId, visitorName){
+  e.preventDefault();
+  if(state.draftItems.length === 0){ showToast('حداقل یک محصول به لیست اضافه کنید'); return; }
+  state.deliveries.push({
+    id: uid(), visitorId, visitorName,
+    items: state.draftItems.map(it=>({...it})),
+    submittedAt: new Date().toISOString(),
+    confirmed: false, confirmedAt: null
+  });
+  state.draftItems = [];
+  await saveDeliveries();
+  showToast('دریافت محصولات ثبت شد');
+  render();
+}
+function startEditDelivery(id){
+  const d = state.deliveries.find(x=>x.id===id);
+  if(!d) return;
+  if(d.confirmed){ showToast('این رکورد تاییدشده است و قابل ویرایش نیست'); return; }
+  state.editingDelivery = id;
+  state.draftItems = d.items.map(it=>({...it}));
+  render();
+}
+function cancelEditDelivery(){
+  state.editingDelivery = null;
+  state.draftItems = [];
+  render();
+}
+async function saveEditDelivery(e, id){
+  e.preventDefault();
+  if(state.draftItems.length === 0){ showToast('حداقل یک محصول باید در لیست باشد'); return; }
+  const d = state.deliveries.find(x=>x.id===id);
+  if(!d) return;
+  if(d.confirmed){ showToast('این رکورد تاییدشده است و قابل ویرایش نیست'); state.editingDelivery=null; state.draftItems=[]; render(); return; }
+  d.items = state.draftItems.map(it=>({...it}));
+  d.updatedAt = new Date().toISOString();
+  state.editingDelivery = null;
+  state.draftItems = [];
+  await saveDeliveries();
+  showToast('لیست محصولات بروزرسانی شد');
+  render();
+}
+async function confirmDelivery(id){
+  if(state.role !== 'admin'){ showToast('تایید دریافت فقط در اختیار مدیر کافخانه است'); return; }
+  const d = state.deliveries.find(x=>x.id===id);
+  if(!d) return;
+  if(!confirm(`آمار محصولات دریافتی «${d.visitorName}» تایید شود؟`)) return;
+  d.confirmed = true;
+  d.confirmedAt = new Date().toISOString();
+  await saveDeliveries();
+  showToast('دریافت محصول تایید شد');
+  render();
+}
+async function unconfirmDelivery(id){
+  if(state.role !== 'admin'){ return; }
+  const d = state.deliveries.find(x=>x.id===id);
+  if(!d) return;
+  d.confirmed = false;
+  d.confirmedAt = null;
+  await saveDeliveries();
+  showToast('تاییدیه برداشته شد');
+  render();
+}
+
+function todayStr(){
+  const d = new Date();
+  return d.toISOString().slice(0,10);
+}
+
+function exportCustomersExcel(){
+  if(typeof XLSX === 'undefined'){ showToast('کتابخانه اکسل بارگذاری نشد. اتصال اینترنت را بررسی کنید.'); return; }
+  let list = state.customers.slice().sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
+  if(state.filterVisitor) list = list.filter(c=>c.visitorId===state.filterVisitor);
+  if(state.filterField) list = list.filter(c=> (c.field||'').includes(state.filterField));
+
+  if(list.length === 0){ showToast('مشتری‌ای برای خروجی گرفتن وجود ندارد'); return; }
+
+  const rows = list.map(c => ({
+    'نام مشتری': c.name,
+    'شماره تماس': c.phone,
+    'حوزه کاری': c.field || '',
+    'ثبت‌شده توسط': c.visitorName || '',
+    'تاریخ ثبت': new Date(c.createdAt).toLocaleDateString('fa-IR')
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(rows, { skipHeader:false });
+  ws['!cols'] = [{wch:22},{wch:16},{wch:20},{wch:18},{wch:14}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'مشتریان');
+  XLSX.writeFile(wb, `مشتریان-کافخانه-${todayStr()}.xlsx`);
+  showToast('فایل اکسل دانلود شد');
+}
+
+function exportTeamExcel(){
+  if(typeof XLSX === 'undefined'){ showToast('کتابخانه اکسل بارگذاری نشد. اتصال اینترنت را بررسی کنید.'); return; }
+  if(state.team.length === 0){ showToast('عضوی برای خروجی گرفتن وجود ندارد'); return; }
+
+  const rows = state.team.map(m => {
+    const count = state.customers.filter(c=>c.visitorId===m.id).length;
+    return {
+      'نام': m.name,
+      'شماره تماس': m.phone,
+      'تاریخ شروع همکاری': m.startDate,
+      'تعداد مشتریان ثبت‌شده': count
+    };
+  });
+
+  const ws = XLSX.utils.json_to_sheet(rows, { skipHeader:false });
+  ws['!cols'] = [{wch:20},{wch:16},{wch:18},{wch:20}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'تیم فروش');
+  XLSX.writeFile(wb, `تیم-فروش-کافخانه-${todayStr()}.xlsx`);
+  showToast('فایل اکسل دانلود شد');
+}
+
+// ---------- render helpers ----------
+function brandIcon(){
+  return `<svg class="brand-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M18 30h24l-2 16a6 6 0 0 1-6 5H26a6 6 0 0 1-6-5l-2-16Z" stroke="#d4af37" stroke-width="2"/>
+    <path d="M42 32h4a5 5 0 0 1 0 10h-3" stroke="#d4af37" stroke-width="2"/>
+    <path d="M30 30c-1-4 1-6 0-9M35 30c1-5-1-6 0-10" stroke="#f0d688" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M32 8c3 3 3 6 0 9-3-3-3-6 0-9Z" fill="#d4af37" opacity="0.85"/>
+    <path d="M27 12c2 2 2 4 0 6-2-2-2-4 0-6Z" fill="#f0d688" opacity="0.7"/>
+    <path d="M37 12c2 2 2 4 0 6-2-2-2-4 0-6Z" fill="#f0d688" opacity="0.7"/>
+  </svg>`;
+}
+
+function header(sub){
+  return `
+  <div class="brand">
+    ${brandIcon()}
+    <div class="brand-text">
+      <h1>کافخانه کسب و کار</h1>
+      <p>${sub}</p>
+    </div>
+  </div>`;
+}
+
+function render(){
+  const app = document.getElementById('app');
+
+  if(state.loading){
+    app.innerHTML = header('مدیریت تیم فروش') + `<div class="loading"><div class="spin"></div> در حال بارگذاری اطلاعات...</div>`;
+    return;
+  }
+
+  let html = '';
+
+  if(state.authScreen === 'admin-setup'){
+    html += header('راه‌اندازی اولیه — مدیر کافخانه');
+    html += renderAdminSetup();
+  } else if(state.authScreen === 'admin-login'){
+    html += header('ورود مدیر کافخانه');
+    html += renderAdminLogin();
+  } else if(state.authScreen === 'sales-login'){
+    html += header('ورود مدیر فروش');
+    html += renderSalesLogin();
+  } else if(state.authScreen === 'visitor-pin'){
+    html += header('ورود ویزیتور');
+    html += renderVisitorPinScreen();
+  } else if(state.authScreen === 'face-capture'){
+    html += header('احراز هویت تصویری');
+    html += renderFaceCapture();
+  } else if(!state.role){
+    html += header('مدیریت تیم فروش');
+    html += renderRoleSelect();
+  } else if(state.role === 'admin'){
+    html += header('پنل مدیر کافخانه');
+    html += renderTopbar('مدیر کافخانه', true);
+    html += renderManagerPanel(true);
+  } else if(state.role === 'manager'){
+    html += header('پنل مدیر فروش');
+    html += renderTopbar('مدیر فروش', false);
+    html += renderManagerPanel(false);
+  } else if(state.role === 'visitor' && !state.currentVisitorId){
+    html += header('مدیریت تیم فروش');
+    html += renderVisitorPick();
+  } else if(state.role === 'visitor' && state.currentVisitorId){
+    const v = state.team.find(x=>x.id===state.currentVisitorId);
+    if(!v){ state.currentVisitorId = null; render(); return; }
+    html += header('پنل ویزیتور');
+    html += renderTopbar(v.name, false);
+    html += renderVisitorPanel(v);
+  }
+
+  if(state.modal) html += renderModal();
+  if(state.toast) html += `<div class="toast">${state.toast}</div>`;
+
+  app.innerHTML = html;
+}
+
+function renderTopbar(name, isAdmin){
+  const changePwBtn = (state.role==='manager')
+    ? `<button class="btn btn-sm" onclick="openModal({type:'change-sales-pw'})">🔒 تغییر رمز من</button>`
+    : (state.role==='admin')
+      ? `<button class="btn btn-sm" onclick="openModal({type:'change-admin-pw'})">🔒 تغییر رمز من</button>`
+      : '';
+  return `
+  <div class="topbar">
+    <div class="who">وارد شده به عنوان: <b>${name}</b></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      ${changePwBtn}
+      <button class="btn btn-ghost btn-sm" onclick="logout()">← تغییر نقش / خروج</button>
+    </div>
+  </div>`;
+}
+
+function renderRoleSelect(){
+  return `
+  <div class="role-screen">
+    <div class="role-title">
+      <h2>وارد پنل خود شوید</h2>
+      <p>نقش خود را انتخاب کنید</p>
+    </div>
+    <div class="role-cards">
+      <div class="glass role-card" onclick="chooseRole('admin')">
+        <div class="ic">🏛️</div>
+        <h3>مدیر کافخانه</h3>
+        <p>دسترسی کامل + مدیریت امنیت و رمزهای عبور</p>
+      </div>
+      <div class="glass role-card" onclick="chooseRole('manager')">
+        <div class="ic">👑</div>
+        <h3>مدیر فروش</h3>
+        <p>مدیریت تیم، مشاهده تمام مشتریان و آمار</p>
+      </div>
+      <div class="glass role-card" onclick="chooseRole('visitor')">
+        <div class="ic">🧑‍💼</div>
+        <h3>ویزیتور</h3>
+        <p>ثبت و ویرایش اطلاعات مشتریان</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderAdminSetup(){
+  return `
+  <div class="role-screen">
+    <div class="glass" style="width:100%;max-width:380px;">
+      <h4 style="margin-bottom:6px;">🏛️ راه‌اندازی اولیه مدیر کافخانه</h4>
+      <p class="hint">این اولین ورود است. یک رمز عبور برای پنل مدیر کافخانه تنظیم کنید. این رمز فقط نزد شما بماند.</p>
+      <form onsubmit="submitAdminSetup(event)">
+        <label>رمز عبور جدید</label>
+        <input type="password" name="pw1" minlength="4" required>
+        <label>تکرار رمز عبور</label>
+        <input type="password" name="pw2" minlength="4" required>
+        ${state.authError ? `<p style="color:var(--danger);font-size:12.5px;margin:-6px 0 14px;">${state.authError}</p>` : ''}
+        <button class="btn btn-gold" type="submit" style="width:100%;">تنظیم رمز و ورود</button>
+      </form>
+      <button class="btn btn-ghost btn-sm" style="margin-top:10px;width:100%;" onclick="backToRoleSelect()">← بازگشت</button>
+    </div>
+  </div>`;
+}
+
+function renderAdminLogin(){
+  return `
+  <div class="role-screen">
+    <div class="glass" style="width:100%;max-width:360px;">
+      <h4 style="margin-bottom:6px;">🏛️ ورود مدیر کافخانه</h4>
+      <form onsubmit="submitAdminLogin(event)">
+        <label>رمز عبور</label>
+        <input type="password" name="pw" required autofocus>
+        ${state.authError ? `<p style="color:var(--danger);font-size:12.5px;margin:-6px 0 14px;">${state.authError}</p>` : ''}
+        <button class="btn btn-gold" type="submit" style="width:100%;">ورود</button>
+      </form>
+      <button class="btn btn-ghost btn-sm" style="margin-top:10px;width:100%;" onclick="backToRoleSelect()">← بازگشت</button>
+    </div>
+  </div>`;
+}
+
+function renderSalesLogin(){
+  if(!state.security.salesHash){
+    return `
+    <div class="role-screen">
+      <div class="glass" style="width:100%;max-width:380px;text-align:center;">
+        <div class="ic" style="font-size:30px;">🔒</div>
+        <h4 style="margin:8px 0;">رمز عبور هنوز تنظیم نشده</h4>
+        <p class="empty-note" style="margin:0 auto 16px;">مدیر کافخانه هنوز رمز پنل مدیر فروش را تنظیم نکرده است. لطفاً از پنل «مدیر کافخانه» → تب «امنیت» این رمز را تنظیم کند.</p>
+        <button class="btn" onclick="backToRoleSelect()">بازگشت</button>
+      </div>
+    </div>`;
+  }
+  return `
+  <div class="role-screen">
+    <div class="glass" style="width:100%;max-width:360px;">
+      <h4 style="margin-bottom:6px;">👑 ورود مدیر فروش</h4>
+      <form onsubmit="submitSalesLogin(event)">
+        <label>رمز عبور</label>
+        <input type="password" name="pw" required autofocus>
+        ${state.authError ? `<p style="color:var(--danger);font-size:12.5px;margin:-6px 0 14px;">${state.authError}</p>` : ''}
+        <button class="btn btn-gold" type="submit" style="width:100%;">ورود</button>
+      </form>
+      <button class="btn btn-ghost btn-sm" style="margin-top:10px;width:100%;" onclick="backToRoleSelect()">← بازگشت</button>
+    </div>
+  </div>`;
+}
+
+function renderVisitorPinScreen(){
+  const v = state.team.find(x=>x.id===state.pendingVisitorId);
+  return `
+  <div class="role-screen">
+    <div class="glass" style="width:100%;max-width:340px;">
+      <h4 style="margin-bottom:6px;">🧑‍💼 ورود ویزیتور</h4>
+      <p class="hint">پین ${v ? escAttr(v.name) : ''} را وارد کنید</p>
+      <form onsubmit="submitVisitorPin(event)">
+        <label>کد پین</label>
+        <input type="password" inputmode="numeric" name="pin" required autofocus>
+        ${state.authError ? `<p style="color:var(--danger);font-size:12.5px;margin:-6px 0 14px;">${state.authError}</p>` : ''}
+        <button class="btn btn-gold" type="submit" style="width:100%;">ورود</button>
+      </form>
+      <button class="btn btn-ghost btn-sm" style="margin-top:10px;width:100%;" onclick="state.authScreen=null;state.pendingVisitorId=null;render();">← بازگشت</button>
+    </div>
+  </div>`;
+}
+
+function renderFaceCapture(){
+  return `
+  <div class="role-screen">
+    <div class="glass" style="width:100%;max-width:380px;text-align:center;">
+      <h4 style="margin-bottom:6px;">📷 ثبت تصویر برای احراز هویت</h4>
+      <p class="hint">به‌عنوان بخشی از ورود امن، لطفاً یک عکس سلفی ثبت کنید. این تصویر فقط برای مدیر کافخانه در گزارش ورود قابل مشاهده است.</p>
+      ${state.cameraError ? `
+        <p style="color:var(--danger);font-size:13px;line-height:1.9;margin-bottom:14px;">${state.cameraError}</p>
+        <button class="btn btn-gold" onclick="retryCamera()" style="width:100%;margin-bottom:10px;">تلاش دوباره</button>
+      ` : `
+        <div style="border-radius:16px;overflow:hidden;border:1px solid var(--glass-border);margin-bottom:16px;background:#000;">
+          <video id="camPreview" autoplay playsinline muted style="width:100%;display:block;transform:scaleX(-1);"></video>
+        </div>
+        <button class="btn btn-gold" onclick="captureAndFinish()" style="width:100%;margin-bottom:10px;">📸 ثبت تصویر و ورود</button>
+      `}
+      <button class="btn btn-ghost btn-sm" style="width:100%;" onclick="cancelFaceCapture()">← انصراف از ورود</button>
+    </div>
+  </div>`;
+}
+
+function renderVisitorPick(){
+  if(state.team.length === 0){
+    return `
+    <div class="role-screen">
+      <div class="role-title">
+        <h2>هنوز عضوی ثبت نشده</h2>
+      </div>
+      <p class="empty-note">لطفاً از مدیر فروش بخواهید ابتدا شما را از پنل «مدیریت تیم» اضافه کند.</p>
+      <button class="btn" onclick="logout()">بازگشت</button>
+    </div>`;
+  }
+  return `
+  <div class="role-screen">
+    <div class="role-title">
+      <h2>شما کدام ویزیتور هستید؟</h2>
+      <p>نام خود را از لیست انتخاب کنید</p>
+    </div>
+    <div class="visitor-pick">
+      ${state.team.map(m => `
+        <div class="glass" onclick="chooseVisitor('${m.id}')">
+          <span>${m.name}</span>
+          <span class="muted">${m.phone}</span>
+        </div>
+      `).join('')}
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="logout()">← بازگشت</button>
+  </div>`;
+}
+
+// ---------- manager panel ----------
+function renderManagerPanel(isAdmin){
+  let tabs = `
+  <div class="tabs">
+    <div class="tab ${state.managerTab==='team'?'active':''}" onclick="setManagerTab('team')">تیم فروش</div>
+    <div class="tab ${state.managerTab==='customers'?'active':''}" onclick="setManagerTab('customers')">مشتریان</div>
+    <div class="tab ${state.managerTab==='products'?'active':''}" onclick="setManagerTab('products')">📦 محصولات</div>
+    <div class="tab ${state.managerTab==='stats'?'active':''}" onclick="setManagerTab('stats')">آمار</div>
+    ${isAdmin ? `<div class="tab ${state.managerTab==='security'?'active':''}" onclick="setManagerTab('security')">🔒 امنیت</div>` : ''}
+  </div>`;
+
+  let html = tabs;
+  if(state.managerTab === 'team') html += renderTeamTab(isAdmin);
+  if(state.managerTab === 'customers') html += renderCustomersTab(isAdmin);
+  if(state.managerTab === 'products') html += renderProductsTab(isAdmin);
+  if(state.managerTab === 'stats') html += renderStatsTab();
+  if(state.managerTab === 'security' && isAdmin) html += renderSecurityTab();
+
+  return html;
+}
+
+function renderProductsTab(isAdmin){
+  let list = state.deliveries.slice().sort((a,b)=> new Date(b.submittedAt)-new Date(a.submittedAt));
+  if(state.filterVisitor) list = list.filter(d=>d.visitorId===state.filterVisitor);
+
+  const visitorOptions = state.team.map(m=>`<option value="${m.id}" ${state.filterVisitor===m.id?'selected':''}>${m.name}</option>`).join('');
+
+  const rows = list.map(d=>{
+    const itemsHtml = `<div class="items-pill-list">${d.items.map(it=>`<span class="items-pill">${escAttr(it.name)} × ${it.qty}</span>`).join('')}</div>`;
+    const statusHtml = d.confirmed
+      ? `<span class="status-confirmed">✅ تاییدشده</span>`
+      : `<span class="status-pending">⏳ در انتظار تایید</span>`;
+    const actionHtml = isAdmin
+      ? (d.confirmed
+          ? `<button class="btn btn-sm" onclick="unconfirmDelivery('${d.id}')">برداشتن تایید</button>`
+          : `<button class="btn btn-gold btn-sm" onclick="confirmDelivery('${d.id}')">✔ تایید آمار</button>`)
+      : '';
+    return `
+    <tr>
+      <td>${d.visitorName}</td>
+      <td>${itemsHtml}</td>
+      <td class="muted">${new Date(d.submittedAt).toLocaleDateString('fa-IR')}</td>
+      <td>${statusHtml}</td>
+      ${isAdmin ? `<td>${actionHtml}</td>` : ''}
+    </tr>`;
+  }).join('') || `<tr class="empty-row"><td colspan="${isAdmin?5:4}">هنوز رکوردی از دریافت محصول ثبت نشده</td></tr>`;
+
+  const hint = isAdmin
+    ? 'آمار محصولاتی که هر ویزیتور اعلام کرده را می‌بینید. با تیک «تایید آمار» صحت دریافتی را به‌عنوان تحویل‌دهنده محصول تایید کنید.'
+    : 'نمای فقط‌خواندنی — تایید آمار محصولات فقط در اختیار مدیر کافخانه است.';
+
+  return `
+  <div class="glass">
+    <h4 style="margin-bottom:4px;">📦 محصولات دریافتی ویزیتورها</h4>
+    <p class="hint">${hint}</p>
+    <div class="filters">
+      <select onchange="setFilterVisitor(this.value)">
+        <option value="">همه ویزیتورها</option>
+        ${visitorOptions}
+      </select>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>ویزیتور</th><th>اقلام دریافتی</th><th>تاریخ</th><th>وضعیت</th>${isAdmin?'<th>عملیات</th>':''}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderSecurityTab(){
+  return `
+  <div class="grid2">
+    <div class="glass">
+      <h4>🔑 رمز عبور مدیر کافخانه (شما)</h4>
+      <p class="hint">رمز خودتان را به‌صورت دوره‌ای تغییر دهید.</p>
+      <button class="btn btn-gold" onclick="openModal({type:'change-admin-pw'})" style="width:100%;">تغییر رمز من</button>
+    </div>
+    <div class="glass">
+      <h4>👑 رمز عبور مدیر فروش</h4>
+      <p class="hint">${state.security.salesHash ? 'رمز مدیر فروش تنظیم شده است. در صورت نیاز می‌توانید آن را بازنشانی کنید.' : 'هنوز رمزی برای مدیر فروش تنظیم نشده است.'}</p>
+      <button class="btn btn-gold" onclick="openModal({type:'set-sales-pw'})" style="width:100%;">${state.security.salesHash ? 'بازنشانی رمز مدیر فروش' : 'تنظیم رمز مدیر فروش'}</button>
+    </div>
+  </div>
+  <div class="glass" style="margin-top:18px;">
+    <h4 style="margin-bottom:4px;">🧑‍💼 پین ویزیتورها</h4>
+    <p class="hint">هر ویزیتور برای ورود به پنل خود از یک پین اختصاصی استفاده می‌کند. در صورت فراموشی، از اینجا بازنشانی کنید.</p>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>نام</th><th>تماس</th><th>عملیات</th></tr></thead>
+        <tbody>
+          ${state.team.map(m=>`
+            <tr>
+              <td>${m.name}</td>
+              <td class="muted" style="direction:ltr;text-align:left;">${m.phone}</td>
+              <td><button class="btn btn-sm" onclick="openModal({type:'reset-pin', id:'${m.id}', name:'${escAttr(m.name)}'})">بازنشانی پین</button></td>
+            </tr>`).join('') || `<tr class="empty-row"><td colspan="3">هنوز ویزیتوری ثبت نشده</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderModal(){
+  const m = state.modal;
+  const err = state.authError ? `<p style="color:var(--danger);font-size:12.5px;margin:-6px 0 14px;">${state.authError}</p>` : '';
+  let inner = '';
+
+  if(m.type === 'change-admin-pw'){
+    inner = `
+      <h4>🔒 تغییر رمز مدیر کافخانه</h4>
+      <form onsubmit="submitChangeAdminPw(event)">
+        <label>رمز فعلی</label><input type="password" name="current" required autofocus>
+        <label>رمز جدید</label><input type="password" name="next" minlength="4" required>
+        <label>تکرار رمز جدید</label><input type="password" name="confirm" minlength="4" required>
+        ${err}
+        <div class="row-actions">
+          <button class="btn btn-gold btn-sm" type="submit">ذخیره</button>
+          <button class="btn btn-sm" type="button" onclick="closeModal()">انصراف</button>
+        </div>
+      </form>`;
+  } else if(m.type === 'set-sales-pw'){
+    inner = `
+      <h4>👑 ${state.security.salesHash ? 'بازنشانی' : 'تنظیم'} رمز مدیر فروش</h4>
+      <form onsubmit="submitSetSalesPw(event)">
+        <label>رمز جدید</label><input type="password" name="next" minlength="4" required autofocus>
+        <label>تکرار رمز جدید</label><input type="password" name="confirm" minlength="4" required>
+        ${err}
+        <div class="row-actions">
+          <button class="btn btn-gold btn-sm" type="submit">ذخیره</button>
+          <button class="btn btn-sm" type="button" onclick="closeModal()">انصراف</button>
+        </div>
+      </form>`;
+  } else if(m.type === 'change-sales-pw'){
+    inner = `
+      <h4>🔒 تغییر رمز من (مدیر فروش)</h4>
+      <form onsubmit="submitChangeSalesPw(event)">
+        <label>رمز فعلی</label><input type="password" name="current" required autofocus>
+        <label>رمز جدید</label><input type="password" name="next" minlength="4" required>
+        <label>تکرار رمز جدید</label><input type="password" name="confirm" minlength="4" required>
+        ${err}
+        <div class="row-actions">
+          <button class="btn btn-gold btn-sm" type="submit">ذخیره</button>
+          <button class="btn btn-sm" type="button" onclick="closeModal()">انصراف</button>
+        </div>
+      </form>`;
+  } else if(m.type === 'reset-pin'){
+    inner = `
+      <h4>🧑‍💼 بازنشانی پین «${m.name}»</h4>
+      <form onsubmit="submitResetPin(event,'${m.id}')">
+        <label>پین جدید (۴ تا ۶ رقم)</label><input inputmode="numeric" name="pin" minlength="4" maxlength="6" required autofocus>
+        ${err}
+        <div class="row-actions">
+          <button class="btn btn-gold btn-sm" type="submit">ذخیره</button>
+          <button class="btn btn-sm" type="button" onclick="closeModal()">انصراف</button>
+        </div>
+      </form>`;
+  } else if(m.type === 'view-login-photo'){
+    inner = `
+      <h4>📷 تصویر ورود «${m.name}»</h4>
+      ${m.loading
+        ? `<div class="loading" style="min-height:180px;"><div class="spin"></div> در حال بارگذاری تصویر...</div>`
+        : (m.photo
+            ? `<img src="${m.photo}" style="width:100%;border-radius:12px;border:1px solid var(--glass-border);margin-bottom:14px;transform:scaleX(-1);">`
+            : `<p class="muted" style="text-align:center;padding:20px 0;">تصویری یافت نشد.</p>`)
+      }
+      <button class="btn btn-sm" style="width:100%;" onclick="closeModal()">بستن</button>`;
+  }
+
+  return `<div class="modal-overlay" onclick="if(event.target===this) closeModal()">
+    <div class="glass modal">${inner}</div>
+  </div>`;
+}
+
+function renderTeamTab(isAdmin){
+  const rows = state.team.map(m => {
+    if(isAdmin && state.editingMember === m.id){
+      return `
+      <tr><td colspan="4">
+        <form class="glass" style="padding:14px;" onsubmit="saveEditMember(event,'${m.id}')">
+          <div class="grid2">
+            <div><label>نام و نام‌خانوادگی</label><input name="name" value="${escAttr(m.name)}" required></div>
+            <div><label>شماره تماس</label><input name="phone" value="${escAttr(m.phone)}" required></div>
+          </div>
+          <div class="row-actions">
+            <button class="btn btn-gold btn-sm" type="submit">ذخیره</button>
+            <button class="btn btn-sm" type="button" onclick="cancelEdit()">انصراف</button>
+          </div>
+        </form>
+      </td></tr>`;
+    }
+    return `
+    <tr>
+      <td>${m.name}</td>
+      <td class="muted" style="direction:ltr;text-align:left;">${m.phone}</td>
+      <td class="muted">${m.startDate}</td>
+      ${isAdmin ? `
+      <td>
+        <div class="row-actions">
+          <button class="btn btn-sm" onclick="startEditMember('${m.id}')">ویرایش</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteMember('${m.id}')">حذف</button>
+        </div>
+      </td>` : ''}
+    </tr>`;
+  }).join('') || `<tr class="empty-row"><td colspan="${isAdmin?4:3}">هنوز هیچ ویزیتوری اضافه نشده است</td></tr>`;
+
+  const addForm = isAdmin ? `
+    <div class="glass">
+      <h4>➕ افزودن ویزیتور جدید</h4>
+      <form onsubmit="addMember(event)">
+        <label>نام و نام‌خانوادگی</label>
+        <input name="name" placeholder="مثلاً علی رضایی" required>
+        <label>شماره تماس</label>
+        <input name="phone" placeholder="09xxxxxxxxx" required>
+        <label>پین ورود (۴ تا ۶ رقم)</label>
+        <input name="pin" inputmode="numeric" minlength="4" maxlength="6" placeholder="مثلاً 1234" required>
+        <button class="btn btn-gold" type="submit" style="width:100%;">افزودن به تیم</button>
+      </form>
+    </div>` : '';
+
+  const hint = isAdmin
+    ? 'به‌عنوان مدیر کافخانه می‌توانید اعضا را اضافه، ویرایش یا حذف کنید.'
+    : 'نمای فقط‌خواندنی — افزودن، ویرایش و حذف اعضا فقط در اختیار مدیر کافخانه است.';
+
+  return `
+  <div class="${isAdmin ? 'grid2' : ''}">
+    ${addForm}
+    <div class="glass">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
+        <div>
+          <h4 style="margin-bottom:4px;">👥 اعضای تیم فروش</h4>
+          <p class="hint">${hint}</p>
+        </div>
+        <button class="btn btn-gold btn-sm" onclick="exportTeamExcel()">⬇ خروجی اکسل</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>نام</th><th>تماس</th><th>تاریخ شروع</th>${isAdmin?'<th>عملیات</th>':''}</tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderCustomersTab(isAdmin){
+  let list = state.customers.slice().sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
+  if(state.filterVisitor) list = list.filter(c=>c.visitorId===state.filterVisitor);
+  if(state.filterField) list = list.filter(c=> (c.field||'').includes(state.filterField));
+
+  const visitorOptions = state.team.map(m=>`<option value="${m.id}" ${state.filterVisitor===m.id?'selected':''}>${m.name}</option>`).join('');
+
+  const rows = list.map(c=>{
+    if(isAdmin && state.editingCustomer === c.id){
+      return `
+      <tr><td colspan="6">
+        <form class="glass" style="padding:14px;" onsubmit="saveEditCustomer(event,'${c.id}')">
+          <div class="grid2">
+            <div><label>نام مشتری</label><input name="name" value="${escAttr(c.name)}" required></div>
+            <div><label>شماره تماس</label><input name="phone" value="${escAttr(c.phone)}" required></div>
+          </div>
+          <label>حوزه کاری</label>
+          <input name="field" value="${escAttr(c.field||'')}">
+          <div class="row-actions">
+            <button class="btn btn-gold btn-sm" type="submit">ذخیره</button>
+            <button class="btn btn-sm" type="button" onclick="cancelEdit()">انصراف</button>
+          </div>
+        </form>
+      </td></tr>`;
+    }
+    return `
+    <tr>
+      <td>${c.name}</td>
+      <td class="muted" style="direction:ltr;text-align:left;">${c.phone}</td>
+      <td><span class="badge">${c.field || '—'}</span></td>
+      <td class="muted">${c.visitorName}</td>
+      <td class="muted">${new Date(c.createdAt).toLocaleDateString('fa-IR')}</td>
+      ${isAdmin ? `
+      <td>
+        <div class="row-actions">
+          <button class="btn btn-sm" onclick="startEditCustomer('${c.id}')">ویرایش</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${c.id}')">حذف</button>
+        </div>
+      </td>` : ''}
+    </tr>`;
+  }).join('') || `<tr class="empty-row"><td colspan="${isAdmin?6:5}">مشتری‌ای با این فیلتر یافت نشد</td></tr>`;
+
+  const hint = isAdmin
+    ? 'به‌عنوان مدیر کافخانه می‌توانید اطلاعات همه ویزیتورها را مشاهده، ویرایش یا حذف کنید.'
+    : 'نمای فقط‌خواندنی — ویرایش و حذف مشتریان فقط در اختیار مدیر کافخانه است.';
+
+  return `
+  <div class="glass">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
+      <div>
+        <h4 style="margin-bottom:4px;">📋 تمام مشتریان ثبت‌شده توسط تیم</h4>
+        <p class="hint">${hint}</p>
+      </div>
+      <button class="btn btn-gold btn-sm" onclick="exportCustomersExcel()">⬇ خروجی اکسل</button>
+    </div>
+    <div class="filters">
+      <select onchange="setFilterVisitor(this.value)">
+        <option value="">همه ویزیتورها</option>
+        ${visitorOptions}
+      </select>
+      <input placeholder="فیلتر بر اساس حوزه کاری..." value="${escAttr(state.filterField)}" oninput="setFilterField(this.value)">
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>نام مشتری</th><th>تماس</th><th>حوزه کاری</th><th>ثبت‌شده توسط</th><th>تاریخ</th>${isAdmin?'<th>عملیات</th>':''}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderStatsTab(){
+  const total = state.customers.length;
+  const totalMembers = state.team.length;
+
+  const byVisitor = {};
+  state.customers.forEach(c=>{
+    byVisitor[c.visitorName || 'نامشخص'] = (byVisitor[c.visitorName || 'نامشخص']||0)+1;
+  });
+  const byField = {};
+  state.customers.forEach(c=>{
+    const f = c.field && c.field.trim() ? c.field.trim() : 'نامشخص';
+    byField[f] = (byField[f]||0)+1;
+  });
+
+  const maxVisitor = Math.max(1, ...Object.values(byVisitor));
+  const maxField = Math.max(1, ...Object.values(byField));
+
+  const visitorBars = Object.entries(byVisitor).sort((a,b)=>b[1]-a[1]).map(([name,count])=>`
+    <div class="bar-row">
+      <div class="name">${name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(count/maxVisitor*100).toFixed(0)}%"></div></div>
+      <div class="bar-count">${count}</div>
+    </div>`).join('') || `<p class="muted">هنوز داده‌ای ثبت نشده</p>`;
+
+  const fieldBars = Object.entries(byField).sort((a,b)=>b[1]-a[1]).map(([name,count])=>`
+    <div class="bar-row">
+      <div class="name">${name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(count/maxField*100).toFixed(0)}%"></div></div>
+      <div class="bar-count">${count}</div>
+    </div>`).join('') || `<p class="muted">هنوز داده‌ای ثبت نشده</p>`;
+
+  return `
+  <div class="stat-grid">
+    <div class="glass stat-card"><div class="num">${total}</div><div class="lbl">کل مشتریان ثبت‌شده</div></div>
+    <div class="glass stat-card"><div class="num">${totalMembers}</div><div class="lbl">اعضای تیم فروش</div></div>
+    <div class="glass stat-card"><div class="num">${Object.keys(byField).length}</div><div class="lbl">حوزه کاری متفاوت</div></div>
+  </div>
+  <div class="grid2">
+    <div class="glass">
+      <h4 style="margin-bottom:14px;">مشتری به تفکیک ویزیتور</h4>
+      ${visitorBars}
+    </div>
+    <div class="glass">
+      <h4 style="margin-bottom:14px;">توزیع حوزه‌های کاری مشتریان</h4>
+      ${fieldBars}
+    </div>
+  </div>`;
+}
+
+// ---------- visitor panel ----------
+function renderVisitorPanel(v){
+  let html = `
+  <div class="vtabs">
+    <div class="vtab ${state.visitorTab==='customers'?'active':''}" onclick="setVisitorTab('customers')">👥 مشتریان</div>
+    <div class="vtab ${state.visitorTab==='products'?'active':''}" onclick="setVisitorTab('products')">📦 محصولات دریافتی</div>
+  </div>`;
+  html += state.visitorTab === 'products' ? renderVisitorProductsSection(v) : renderVisitorCustomersSection(v);
+  return html;
+}
+
+function renderVisitorCustomersSection(v){
+  const mine = state.customers.filter(c=>c.visitorId===v.id).sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
+
+  const rows = mine.map(c=>{
+    if(state.editingCustomer === c.id){
+      return `
+      <tr><td colspan="4">
+        <form class="glass" style="padding:14px;" onsubmit="saveEditCustomer(event,'${c.id}')">
+          <div class="grid2">
+            <div><label>نام مشتری</label><input name="name" value="${escAttr(c.name)}" required></div>
+            <div><label>شماره تماس</label><input name="phone" value="${escAttr(c.phone)}" required></div>
+          </div>
+          <label>حوزه کاری</label>
+          <input name="field" value="${escAttr(c.field||'')}">
+          <div class="row-actions">
+            <button class="btn btn-gold btn-sm" type="submit">ذخیره</button>
+            <button class="btn btn-sm" type="button" onclick="cancelEdit()">انصراف</button>
+          </div>
+        </form>
+      </td></tr>`;
+    }
+    return `
+    <tr>
+      <td>${c.name}</td>
+      <td class="muted" style="direction:ltr;text-align:left;">${c.phone}</td>
+      <td><span class="badge">${c.field || '—'}</span></td>
+      <td>
+        <button class="btn btn-sm" onclick="startEditCustomer('${c.id}')">ویرایش</button>
+      </td>
+    </tr>`;
+  }).join('') || `<tr class="empty-row"><td colspan="4">هنوز مشتری‌ای ثبت نکرده‌اید</td></tr>`;
+
+  return `
+  <div class="grid2">
+    <div class="glass">
+      <h4>➕ ثبت مشتری جدید</h4>
+      <form onsubmit="addCustomer(event,'${v.id}','${escAttr(v.name)}')">
+        <label>نام و نام‌خانوادگی مشتری</label>
+        <input name="name" placeholder="نام مشتری" required>
+        <label>شماره تماس</label>
+        <input name="phone" placeholder="09xxxxxxxxx" required>
+        <label>حوزه کاری خریدار</label>
+        <input name="field" placeholder="مثلاً پوشاک، مواد غذایی، خدمات...">
+        <button class="btn btn-gold" type="submit" style="width:100%;">ثبت مشتری</button>
+      </form>
+    </div>
+    <div class="glass">
+      <h4 style="margin-bottom:4px;">📇 مشتریان من</h4>
+      <p class="hint">فقط مشتریانی که خودتان ثبت کرده‌اید نمایش داده می‌شود. امکان حذف وجود ندارد؛ در صورت نیاز به حذف با مدیر کافخانه هماهنگ کنید.</p>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>نام</th><th>تماس</th><th>حوزه کاری</th><th>عملیات</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderDraftItemsEditor(){
+  const items = state.draftItems.map((it, idx) => `
+    <div class="draft-chip">
+      <span><span class="qty">${it.qty}×</span>${escAttr(it.name)}</span>
+      <button class="btn btn-sm" type="button" onclick="removeDraftItem(${idx})">حذف</button>
+    </div>`).join('') || `<p class="muted" style="margin:4px 0;">هنوز محصولی به لیست اضافه نشده</p>`;
+
+  return `
+    <form class="item-add-row" onsubmit="addDraftItem(event)" style="margin-bottom:10px;">
+      <input name="pname" data-draft-name placeholder="نام محصول" required style="margin-bottom:0;">
+      <input name="pqty" type="number" min="1" placeholder="تعداد" required style="margin-bottom:0;">
+      <button class="btn btn-sm" type="submit">➕ افزودن</button>
+    </form>
+    <div class="draft-list">${items}</div>`;
+}
+
+function renderVisitorProductsSection(v){
+  const mine = state.deliveries.filter(d=>d.visitorId===v.id).sort((a,b)=> new Date(b.submittedAt)-new Date(a.submittedAt));
+
+  const editingId = state.editingDelivery;
+  const formCard = editingId ? `
+    <div class="glass">
+      <h4>✏️ ویرایش رکورد دریافت محصول</h4>
+      <p class="hint">لیست اقلام را اصلاح کنید و ذخیره نمایید.</p>
+      <form onsubmit="saveEditDelivery(event,'${editingId}')">
+        ${renderDraftItemsEditor()}
+        <div class="row-actions">
+          <button class="btn btn-gold btn-sm" type="submit">ذخیره تغییرات</button>
+          <button class="btn btn-sm" type="button" onclick="cancelEditDelivery()">انصراف</button>
+        </div>
+      </form>
+    </div>` : `
+    <div class="glass">
+      <h4>➕ ثبت دریافت محصول جدید</h4>
+      <p class="hint">نام و تعداد هر محصول را اضافه کنید، سپس کل لیست را ثبت نمایید.</p>
+      <form onsubmit="submitDelivery(event,'${v.id}','${escAttr(v.name)}')">
+        ${renderDraftItemsEditor()}
+        <button class="btn btn-gold" type="submit" style="width:100%;">ثبت دریافت محصولات</button>
+      </form>
+    </div>`;
+
+  const rows = mine.map(d=>{
+    const itemsHtml = `<div class="items-pill-list">${d.items.map(it=>`<span class="items-pill">${escAttr(it.name)} × ${it.qty}</span>`).join('')}</div>`;
+    const statusHtml = d.confirmed ? `<span class="status-confirmed">✅ تاییدشده</span>` : `<span class="status-pending">⏳ در انتظار تایید</span>`;
+    return `
+    <tr>
+      <td>${itemsHtml}</td>
+      <td class="muted">${new Date(d.submittedAt).toLocaleDateString('fa-IR')}</td>
+      <td>${statusHtml}</td>
+      <td>${d.confirmed ? '<span class="muted">—</span>' : `<button class="btn btn-sm" onclick="startEditDelivery('${d.id}')">ویرایش</button>`}</td>
+    </tr>`;
+  }).join('') || `<tr class="empty-row"><td colspan="4">هنوز دریافتی ثبت نکرده‌اید</td></tr>`;
+
+  return `
+  <div class="grid2">
+    ${formCard}
+    <div class="glass">
+      <h4 style="margin-bottom:4px;">📦 محصولات دریافتی من</h4>
+      <p class="hint">رکوردهای تاییدشده قابل ویرایش نیستند. حذف هیچ رکوردی توسط شما ممکن نیست.</p>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>اقلام</th><th>تاریخ</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+}
+
+function escAttr(s){
+  return (s||'').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+loadAll();
+</script>
+</body>
+</html>
